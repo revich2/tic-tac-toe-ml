@@ -1,0 +1,37 @@
+{
+  "name": "@car-wash/core",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "git@gitlab.com:denied-one/car-wash/core.git",
+  "author": "Alexey Lyubeznov <alexey.lyubeznov@denied.one>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "gulp start",
+    "build": "gulp build",
+    "lint": "gulp lint"
+  },
+  "devDependencies": {
+    "eslint": "^5.6.1",
+    "eslint-plugin-prettier": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-eslint": "^5.0.0",
+    "gulp-if": "^2.0.2",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-util": "^3.0.8",
+    "husky": "^1.1.1",
+    "nodemon": "^1.18.4",
+    "prettier": "^1.14.3"
+  },
+  "dependencies": {
+    "app-module-path": "^2.2.0",
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.0.0",
+    "dotenv-expand": "^4.2.0",
+    "express": "^4.16.3",
+    "morgan": "^1.9.1",
+    "pg": "^7.5.0",
+    "sequelize": "^4.39.0"
+  }
+}

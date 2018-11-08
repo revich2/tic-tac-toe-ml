@@ -1,0 +1,7 @@
+{
+  "typescript.validate.enable": false,
+  "eslint.autoFixOnSave": true,
+  "eslint.packageManager": "yarn",
+  "eslint.run": "onSave",
+  "eslint.alwaysShowStatus": true
+}

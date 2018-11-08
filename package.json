@@ -1,0 +1,28 @@
+{
+  "name": "ml-learn",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "gulp start",
+    "build": "gulp build",
+    "lint": "gulp lint"
+  },
+  "devDependencies": {
+    "eslint": "^5.6.1",
+    "eslint-plugin-prettier": "^3.0.0",
+    "gulp": "^4.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-eslint": "^5.0.0",
+    "gulp-if": "^2.0.2",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-util": "^3.0.8",
+    "husky": "^1.1.1",
+    "nodemon": "^1.18.4",
+    "prettier": "^1.14.3"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs": "^0.13.3",
+    "nodemon": "^1.18.6"
+  }
+}
