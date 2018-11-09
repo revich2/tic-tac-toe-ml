@@ -5,39 +5,28 @@ require('@tensorflow/tfjs-node-gpu')
 
 const { dataSet } = require('./prepareData')
 
-const orderBy = require('lodash/orderBy')
+const NNModelService = require('./NNModelService')
+const modelService = new NNModelService(tf)
 
 async function training() {
-  const { inputs, expected } = dataSet.createDataSetForXWinsChangedExpected2(3, 1)
+  modelService.buildModel((model, _tf) => {
+    model.add(_tf.layers.dense({ units: 27, activation: 'sigmoid', inputShape: [27] }))
+    model.add(_tf.layers.dense({ units: 9, activation: 'sigmoid', inputShape: [9] }))
+    model.compile({ loss: 'meanSquaredError', optimizer: 'rmsprop' })
 
-  const model = tf.sequential()
-  model.add(tf.layers.dense({ units: 27, activation: 'sigmoid', inputShape: [27] }))
-  model.add(tf.layers.dense({ units: 9, activation: 'sigmoid', inputShape: [9] }))
+    return model
+  })
 
-  model.compile({ loss: 'meanSquaredError', optimizer: 'rmsprop' })
+  const { inputs, expected } = dataSet.createDataSetForXWins(3, 1)
 
-  const training_data = tf.tensor(inputs, [inputs.length, 27])
+  await modelService.learnModel(inputs, expected, 30)
+  await modelService.saveModel(`file://${__dirname + '/../model'}`)
 
-  const target_data = tf.tensor(expected)
+  const test = [[1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1]]
 
-  console.log(inputs)
-  console.log(expected)
+  const predictResult = await modelService.predict(test)
 
-  // for(let i = 0; i < 30; i++) {
-  //   var h = await model.fit(training_data, target_data, { epochs: 30 })
-
-  //   console.log(h.history.loss[0])
-  // }
-
-  // await model.save(`file://${__dirname + '/../model'}`);
-
-  // const test = [
-  //   [1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1],
-  //   [1,0,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,1,0,1,0,0,0,1,1,0,0],
-  // ]
-  // const _test = tf.tensor(test)
-
-  // model.predict(_test).print()
+  console.log('Predict ceil: ', predictResult)
 }
 
 training()

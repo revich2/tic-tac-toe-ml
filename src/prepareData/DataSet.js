@@ -39,7 +39,7 @@ class DataSet {
     }
   }
 
-  createDataSetForXWinsChangedExpected2(boardSize, dataCount) {
+  createDataSetForXWins(boardSize, dataCount) {
     let inputs = []
     let expected = []
 
