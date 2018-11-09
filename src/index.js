@@ -1,55 +1,63 @@
 'use strict'
 
 const tf = require('@tensorflow/tfjs')
+require('@tensorflow/tfjs-node-gpu')
 
 const { dataSet } = require('./prepareData')
-// console.dir(dataSet.createDataSetFullHistory(3, 1))
 
-async   function training() {
-  const { inputs, expected } = dataSet.createDataSetFullHistory(3, 10)
+const orderBy = require('lodash/orderBy')
+
+async function training() {
+  const { inputs, expected } = dataSet.createDataSetForXWinsChangedExpected2(3, 1)
 
   const model = tf.sequential()
   model.add(tf.layers.dense({ units: 27, activation: 'sigmoid', inputShape: [27] }))
-  model.add(tf.layers.dense({ units: 9, activation: 'sigmoid' }))
-  model.add(tf.layers.dense({ units: 1, activation: 'sigmoid', inputShape: [9] }))
+  model.add(tf.layers.dense({ units: 9, activation: 'sigmoid', inputShape: [9] }))
 
   model.compile({ loss: 'meanSquaredError', optimizer: 'rmsprop' })
 
-  // console.dir(inputs)
-  // console.dir(expected)
+  const training_data = tf.tensor(inputs, [inputs.length, 27])
 
-  const training_data = tf.tensor(inputs)
+  const target_data = tf.tensor(expected)
 
-  const target_data = tf.tensor2d(expected, [expected.length, 1])
+  console.log(inputs)
+  console.log(expected)
 
-  for (let i = 1; i < 10; ++i) {
-    var h = await model.fit(training_data, target_data, { epochs: 30 })
-    console.log('Loss after Epoch ' + i + ' : ' + h.history.loss[0])
-  }
+  // for(let i = 0; i < 30; i++) {
+  //   var h = await model.fit(training_data, target_data, { epochs: 30 })
 
-  model.predict(training_data).print()
+  //   console.log(h.history.loss[0])
+  // }
+
+  // await model.save(`file://${__dirname + '/../model'}`);
+
+  // const test = [
+  //   [1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1],
+  //   [1,0,0,0,0,1,1,0,0,0,1,0,0,1,0,0,0,1,0,1,0,0,0,1,1,0,0],
+  // ]
+  // const _test = tf.tensor(test)
+
+  // model.predict(_test).print()
 }
 
 training()
 
-// async function go() {
+// async function testLoad() {
+//   const model = await tf.loadModel(`file://${__dirname + '/../model/model.json'}`)
 
-// const model = tf.sequential();
-// model.add(tf.layers.dense({units: 10, activation: 'sigmoid',inputShape: [2]}));
-// model.add(tf.layers.dense({units: 1, activation: 'sigmoid'}));
+//   const test = [[1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1]]
+//   const _test = tf.tensor(test)
 
-// model.compile({loss: 'meanSquaredError', optimizer: 'rmsprop'});
+//   const resultData = await model.predict(_test).data()
 
-// const training_data = tf.tensor2d([[0,0],[0,1],[1,0],[1,1]]);
-// const target_data = tf.tensor2d([[0],[1],[1],[0]]);
+//   const trasformData = Array.from(resultData).map((value, index) => ({
+//     value,
+//     ceil: index,
+//   }))
 
-// for (let i = 1; i < 100 ; ++i) {
-//  var h = await model.fit(training_data, target_data, {epochs: 30});
-//    console.log("Loss after Epoch " + i + " : " + h.history.loss[0]);
+//   const orderedData = orderBy(trasformData, ['value'], ['desc'])
+
+//   console.log('result', orderedData)
 // }
 
-//  model.predict(training_data).print();
-
-// }
-
-// go();
+// testLoad()

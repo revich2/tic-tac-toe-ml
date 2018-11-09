@@ -7,10 +7,12 @@ class Game {
     this.bot = bot
     this.currentMove = 1
     this.movesHistory = []
+    this.board = null
   }
 
   setBoard(board) {
     this.board = board
+    this._pushBoardToHistory(board)
   }
 
   setInitialMove(move) {
@@ -18,7 +20,8 @@ class Game {
   }
 
   _pushBoardToHistory(board) {
-    this.movesHistory.push(board)
+    const _board = JSON.parse(JSON.stringify(board))
+    this.movesHistory = [...this.movesHistory, _board]
   }
 
   _changeCurrentMove(currentMove) {
@@ -26,24 +29,26 @@ class Game {
   }
 
   playGame(cb) {
-    const { row, column } = this.bot.makeMove(this.board)
+    let winner = null
 
-    this.board[row][column] = this.currentMove
-    this._changeCurrentMove(this.currentMove)
+    while (winner === null) {
+      const { row, column } = this.bot.makeMove(this.board)
 
-    this._pushBoardToHistory(this.board)
+      this.board[row][column] = this.currentMove
+      this._pushBoardToHistory(this.board)
 
-    const winner = checkWinner(this.board)
+      this._changeCurrentMove(this.currentMove)
 
-    if (winner === null) {
-      this.playGame(cb)
-    } else if (cb) {
+      winner = checkWinner(this.board)
+    }
+
+    if (cb) {
       cb({ winner, board: this.board, history: this.movesHistory })
     }
   }
 
   resetGame() {
-    delete this.board
+    this.board = null
 
     this.movesHistory = []
     this.currentMove = 1

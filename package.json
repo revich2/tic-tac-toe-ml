@@ -23,6 +23,9 @@
   },
   "dependencies": {
     "@tensorflow/tfjs": "^0.13.3",
+    "@tensorflow/tfjs-node": "^0.1.19",
+    "@tensorflow/tfjs-node-gpu": "^0.1.19",
+    "lodash": "^4.17.11",
     "nodemon": "^1.18.6"
   }
 }
